@@ -12,59 +12,74 @@
         @submit="onFormSubmit"
         class="flex flex-col gap-8 w-full sm:w-56">
         <div class="flex flex-col gap-2">
-          <InputText
-            name="firstName"
-            type="text"
-            placeholder="First Name"
-            fluid
-            :formControl="{ validateOnValueUpdate: true }" />
-          <Message
-            v-if="$form.firstName?.invalid"
-            severity="error"
-            size="small"
-            variant="simple"
-            >{{ $form.firstName.error.message }}</Message
-          >
+          <IconField>
+            <InputIcon class="pi-minus-circle" />
+            <InputText
+              name="firstName"
+              type="text"
+              placeholder="First Name"
+              fluid
+              :formControl="{ validateOnValueUpdate: true }" />
+            <Message
+              v-if="$form.firstName?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.firstName.error.message }}</Message
+            >
+          </IconField>
         </div>
         <div class="flex flex-col gap-2">
-          <InputText
-            name="lastName"
-            type="text"
-            placeholder="Last Name"
-            fluid />
-          <Message
-            v-if="$form.lastName?.invalid"
-            severity="error"
-            size="small"
-            variant="simple"
-            >{{ $form.lastName.error.message }}</Message
-          >
+          <IconField>
+            <InputIcon class="pi-minus-circle" />
+            <InputText
+              name="lastName"
+              type="text"
+              placeholder="Last Name"
+              fluid />
+            <Message
+              v-if="$form.lastName?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.lastName.error.message }}</Message
+            >
+          </IconField>
         </div>
         <div class="flex flex-col gap-2">
-          <InputText name="username" type="text" placeholder="Username" fluid />
-          <Message
-            v-if="$form.username?.invalid"
-            severity="error"
-            size="small"
-            variant="simple"
-            >{{ $form.username.error.message }}</Message
-          >
+          <IconField>
+            <InputIcon class="pi pi-user" />
+            <InputText
+              name="username"
+              type="text"
+              placeholder="Username"
+              fluid />
+            <Message
+              v-if="$form.username?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.username.error.message }}
+            </Message>
+          </IconField>
         </div>
         <div class="flex flex-col gap-2">
-          <Password
-            name="password"
-            type="text"
-            placeholder="Password"
-            :feedback="false"
-            toggleMask
-            fluid />
-          <Message
-            v-if="$form.password?.invalid"
-            severity="error"
-            size="small"
-            variant="simple"
-            >{{ $form.password.error.message }}</Message
-          >
+          <IconField iconPosition="left">
+            <InputIcon class="pi pi-lock" />
+            <Password
+              name="password"
+              placeholder="Password"
+              :feedback="false"
+              toggleMask
+              fluid />
+            <Message
+              v-if="$form.password?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.password.error.message }}
+            </Message>
+          </IconField>
         </div>
         <Button type="submit" severity="secondary" label="Submit" />
       </Form>
@@ -81,6 +96,8 @@ import Message from "primevue/message";
 import Toast from "primevue/toast";
 import Button from "primevue/button";
 import Password from "primevue/password";
+import IconField from "primevue/iconfield";
+import InputIcon from "primevue/inputicon";
 
 const toast = useToast();
 
@@ -103,7 +120,7 @@ const resolver = ({ values }) => {
   }
 
   if (!values.password) {
-    errors.password = [{ message: "Password name is required." }];
+    errors.password = [{ message: "Password is required." }];
   }
 
   if (!values.lastName) {

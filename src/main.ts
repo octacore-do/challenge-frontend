@@ -5,6 +5,7 @@ import PrimeVue from "primevue/config";
 import ConfirmationService from "primevue/confirmationservice";
 import DialogService from "primevue/dialogservice";
 import ToastService from "primevue/toastservice";
+import "primeicons/primeicons.css";
 
 import AppState from "./plugins/appState.ts";
 import Noir from "./presets/Noir.ts";
