@@ -24,8 +24,7 @@
 
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
-import Drawer from "primevue/drawer";
-import Button from "primevue/button";
+import { Button, Drawer } from "primevue";
 
 const props = defineProps<{
   title: string;

@@ -89,15 +89,18 @@
 
 <script setup>
 import { ref } from "vue";
-import { useToast } from "primevue/usetoast";
+import {
+  useToast,
+  InputText,
+  Message,
+  Toast,
+  Button,
+  Password,
+  IconField,
+  InputIcon,
+} from "primevue";
+
 import { Form } from "@primevue/forms";
-import InputText from "primevue/inputtext";
-import Message from "primevue/message";
-import Toast from "primevue/toast";
-import Button from "primevue/button";
-import Password from "primevue/password";
-import IconField from "primevue/iconfield";
-import InputIcon from "primevue/inputicon";
 
 const toast = useToast();
 
@@ -144,46 +147,6 @@ const onFormSubmit = ({ valid }) => {
 </script>
 
 <style>
-:root {
-  --body-bg: var(--p-surface-50);
-  --body-text-color: var(--p-surface-900);
-  --card-border: 1px solid var(--border-color);
-  --card-bg: var(--p-surface-0);
-  --border-color: var(--p-surface-200);
-  --text-color: var(--p-surface-700);
-  --overlay-background: #ffffff;
-}
-
-:root[class="p-dark"] {
-  --body-bg: var(--p-surface-950);
-  --body-text-color: var(--p-surface-50);
-  --card-border: 1px solid transparent;
-  --card-bg: var(--p-surface-900);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --text-color: var(--p-surface-0);
-  --overlay-background: var(--p-surface-900);
-}
-
-html {
-  font-size: 14px;
-}
-
-body {
-  margin: 0px;
-  min-height: 100vh;
-  min-width: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background-color: var(--body-bg);
-  font-weight: normal;
-  color: var(--body-text-color);
-  padding: 1rem;
-  display: flex; /* Added */
-  justify-content: center; /* Added */
-  align-items: center; /* Added */
-  flex-direction: column; /* Added if you want column layout */
-}
-
 .card {
   background: var(--card-bg);
   border: var(--card-border);

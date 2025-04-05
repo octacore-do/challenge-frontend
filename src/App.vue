@@ -6,7 +6,7 @@ import "tailwindcss-primeui";
 </script>
 
 <template>
-  <Dashboard />
+  <Registro />
 </template>
 
 <style scoped></style>
