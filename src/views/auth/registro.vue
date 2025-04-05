@@ -2,13 +2,24 @@
   <div class="card">
     <div class="innerCard">
       <Toast />
+      <div class="btn" style="display: flex; justify-content: flex-start">
+        <Button
+          class="btn"
+          icon="pi pi-bookmark"
+          type="submit"
+          severity="secondary"
+          label="Login">
+        </Button>
+      </div>
+      <div class="header">
+        <h3 class="">Registro de usuario</h3>
+      </div>
       <Form
         v-slot="$form"
         :initialValues
         :resolver
         :validateOnValueUpdate="false"
         :validateOnBlur="true"
-        :validateOnMount="['password']"
         @submit="onFormSubmit"
         class="flex flex-col gap-8 w-full sm:w-56">
         <div class="flex flex-col gap-2">
@@ -29,7 +40,7 @@
             >
           </IconField>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="input flex flex-col gap-2">
           <IconField>
             <InputIcon class="pi-minus-circle" />
             <InputText
@@ -46,7 +57,7 @@
             >
           </IconField>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="input flex flex-col gap-2">
           <IconField>
             <InputIcon class="pi pi-user" />
             <InputText
@@ -63,7 +74,7 @@
             </Message>
           </IconField>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="input flex flex-col gap-2">
           <IconField iconPosition="left">
             <InputIcon class="pi pi-lock" />
             <Password
@@ -81,7 +92,9 @@
             </Message>
           </IconField>
         </div>
-        <Button type="submit" severity="secondary" label="Submit" />
+        <div class="btn">
+          <Button type="submit" severity="secondary" label="Submit" />
+        </div>
       </Form>
     </div>
   </div>
@@ -147,26 +160,38 @@ const onFormSubmit = ({ valid }) => {
 </script>
 
 <style>
+.header {
+  display: flex;
+  justify-content: center;
+}
+
 .card {
   background: var(--card-bg);
   border: var(--card-border);
   padding: 2rem;
   border-radius: 10px;
   margin-bottom: 1rem;
-  width: 100%; /* Added */
 
-  max-width: 70vh; /* Maximum size */
-  min-width: 70vh;
+  max-width: 80vh;
+  min-width: 90vh;
 
-  max-height: 60vh; /* Maximum size */
+  max-height: 60vh;
   min-height: 50vh;
 
-  display: flex; /* Added */
-  align-items: center; /* Added */
+  display: flex;
+  align-items: center;
 }
 
 .innerCard {
   width: 100%;
   height: 90%;
+}
+
+.input {
+  margin-top: 1%;
+}
+
+.btn {
+  margin-top: 1%;
 }
 </style>

@@ -5,77 +5,62 @@
         <div class="mt-7 grid gap-4 mb-4 sm:grid-cols-2">
           <Select
             name="city.name"
+            class="DrawerInputs"
             :options="industries"
             optionLabel="name"
             placeholder="Seleccione un sector"
             fluid />
           <InputText
-            class="mt-3"
-            type="text"
+            class="DrawerInputs"
             placeholder="Nombre de la posicion"
             name="name"
             :model="v$.name"
             @change="handleInput" />
 
           <Select
-            class="mt-3"
+            class="DrawerInputs"
             name="city.name"
             :options="disponibilidad"
             optionLabel="name"
             placeholder="Seleccione la disponibilidad"
             fluid />
           <Select
-            class="mt-3"
+            class="DrawerInputs"
             name="city.name"
             :options="modalidad"
             optionLabel="name"
             placeholder="Modalidad"
             fluid />
           <InputText
-            class="mt-3"
-            type="text"
+            class="DrawerInputs"
             label="Codigo"
             name="code"
+            placeholder="Monto salarial destinado "
             :model="v$.code"
             @change="handleInput" />
-
-          <InputText
-            class="mt-3"
-            type="text"
-            label="Nombre"
-            name="name"
-            :model="v$.name"
-            @change="handleInput" />
-          <InputText
-            class="mt-3"
-            type="text"
-            label="Codigo"
-            name="code"
-            :model="v$.code"
-            @change="handleInput" />
-
-          <div class="flex flex-2 mt-3">
-            <label class="mr-2" for="Name">Estatus:</label>
-          </div>
+          <Select
+            class="DrawerInputs"
+            name="city.name"
+            :options="estatus"
+            optionLabel="name"
+            placeholder="Estatus"
+            fluid />
         </div>
-        <div class="flex flex-col-2 pt-3 justify-center">
+        <div
+          style="margin-top: 20%; display: flex; justify-content: space-around">
           <Button
+            label="Guardar"
             @click="onToggleDrawerForm(true)"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            type="button">
-            Guardar
-          </Button>
+            severity="info" />
           <Button
+            label="Cerrar"
             @click="onToggleDrawerForm()"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            type="button">
-            Cerrar
-          </Button>
+            severity="warn" />
           <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400" />
         </div>
       </DrawerForm>
     </div>
-    <div class="card bg-blue-700">
+    <div class="card" style="margin-top: 5%">
       <Carousel
         :value="products"
         :numVisible="3"
@@ -146,6 +131,11 @@ const modalidad = ref([
   { name: "Remota", code: "REM" },
   { name: "Hibrida", code: "HIB" },
   { name: "Presencial", code: "PRE" },
+]);
+
+const estatus = ref([
+  { name: "Activa", code: "ACT" },
+  { name: "Inactiva", code: "INAC" },
 ]);
 
 const formInitialState: any = {
@@ -258,5 +248,9 @@ const onToggleDrawerForm = async (saveuser?: boolean) => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.DrawerInputs {
+  margin-bottom: 3%;
 }
 </style>
