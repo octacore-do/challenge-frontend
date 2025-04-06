@@ -5,29 +5,55 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 import { useUserStore } from "../store/modules/user";
-import routes from "./routes";
-import type { UserInfo } from "../store/types/store";
+import Home from "../../src/views/dashboard/jobScreen.vue";
+import Login from "../../src/views/auth/login.vue";
+
+const routes: RouteRecordRaw[] = [
+  {
+    path: "/",
+    redirect: "/login",
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/home",
+    name: "Dashboard",
+    component: Home,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  // Ruta para 404
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/login",
+  },
+];
 
 export const router = createRouter({
-  history: createWebHistory(),
-  routes: routes as unknown as RouteRecordRaw[],
+  history: createWebHistory(import.meta.env.BASE_URL), // Mejor manejo de base URL
+  routes,
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore();
-  const token = userStore.getToken;
-  const user: Nullable<UserInfo> = userStore.getUserInfo;
+  const isAuthenticated = userStore.getToken;
 
-  if (token && to.fullPath === "/login") return "/";
-  if (to.fullPath === "/login") return true;
-  if (!token || token === null || token === undefined || token === "")
-    return "/login";
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    return { name: "Login" };
+  }
 
-  if (!user) await userStore.loadMe();
-  if (!user || user === null) return "/login";
-  return false;
+  if (to.name === "Login" && isAuthenticated) {
+    return { name: "Dashboard" };
+  }
 });
 
 export function setupRouter(app: App<Element>) {

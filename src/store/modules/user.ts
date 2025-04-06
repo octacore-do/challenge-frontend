@@ -66,28 +66,29 @@ export const useUserStore = defineStore("user-app", {
   },
   actions: {
     async login(payload: LoginParams) {
-      const body = formFormatUrl(payload);
+      // const body = formFormatUrl(payload);
 
-      const { error, data, isFinished } = await useFetch<AuthLoginResponse>(
-        "/api/v1/login/access-token",
-        {
-          beforeFetch({ options }) {
-            options.headers = {
-              "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-            };
-          },
-        }
-      )
-        .post(body)
-        .json<AuthLoginResponse>();
+      // const { error, data, isFinished } = await useFetch<AuthLoginResponse>(
+      //   "/api/v1/user_platform/credentials",
+      //   {
+      //     beforeFetch({ options }) {
+      //       options.headers = {
+      //         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      //       };
+      //     },
+      //   }
+      // )
+      //   .post(body)
+      //   .json<AuthLoginResponse>();
 
-      if (isFinished.value && !error.value) {
-        this.data.token = data.value?.access_token;
-
-        await this.loadMe();
-
-        return !!this.data.userInfo;
-      }
+      // if (isFinished.value && !error.value) {
+      // this.data.token = data.value?.access_token;
+      this.data.token = "cambia la funcion en el store del user";
+      //flow commmented in case the userInfo feature is needed
+      // await this.loadMe();
+      // return !!this.data.userInfo;
+      return !!this.data.token;
+      // }
 
       return false;
     },
@@ -117,125 +118,28 @@ export const useUserStore = defineStore("user-app", {
         },
       });
 
-      const response = await meFetch.get().json<UserInfo>();
+      // const response = await meFetch.get().json<UserInfo>();
 
-      if (!response.canAbort.value && response.statusCode.value === 200) {
-        const user: UserInfo | null = response.data.value;
+      const responseUserValue: UserInfo = {
+        id: 123132,
+        full_name: "kakato",
+        email: "string",
+        is_active: true,
+        is_superuser: true,
+        user_type: 8,
+        password: "string",
+      };
+
+      // if (!response.canAbort.value && response.statusCode.value === 200) {
+      if (responseUserValue) {
+        // const user: UserInfo | null = response.data.value;
+        const user: UserInfo | null = responseUserValue;
         if (user) {
           user.password = "";
         }
         this.data.userInfo = user;
       } else {
         this.data.userInfo = null;
-      }
-    },
-
-    async fetchUsers() {
-      const self = this;
-      const meFetch = useFetch<UserInfo>("/api/v1/users", {
-        beforeFetch({ options, cancel }) {
-          const token = self.data.token;
-          if (!token) {
-            cancel();
-            return;
-          }
-          options.headers = {
-            Authorization: `Bearer ${token}`,
-          };
-
-          return { options };
-        },
-      });
-
-      const response = await meFetch.get().json<UserInfo[]>();
-
-      if (!response.canAbort.value && response.statusCode.value === 200) {
-        this.users = response.data.value;
-      } else {
-        this.users = null;
-      }
-    },
-
-    async postUser(payload: UserInfo) {
-      const self = this;
-      const meFetch = useFetch<UserInfo>("/api/v1/users/", {
-        beforeFetch({ options, cancel }) {
-          const token = self.data.token;
-          if (!token) {
-            cancel();
-            return;
-          }
-          options.headers = {
-            Authorization: `Bearer ${token}`,
-          };
-
-          return { options };
-        },
-      });
-
-      const response = await meFetch.post(payload).json<UserInfo>();
-
-      if (!response.canAbort.value && response.statusCode.value === 200) {
-        this.users?.push(response.data.value!);
-        return response.data.value;
-      } else {
-        this.users = null;
-      }
-    },
-
-    async updateUser(payload: UserInfo, id: number) {
-      const self = this;
-      const meFetch = useFetch<UserInfo>(`/api/v1/users/${id}`, {
-        beforeFetch({ options, cancel }) {
-          const token = self.data.token;
-          if (!token) {
-            cancel();
-            return;
-          }
-          options.headers = {
-            Authorization: `Bearer ${token}`,
-          };
-
-          return { options };
-        },
-      });
-
-      const response = await meFetch.put(payload).json<UserInfo>();
-
-      if (!response.canAbort.value && response.statusCode.value === 200) {
-        if (response.data.value) {
-          this.users?.forEach((item, index) =>
-            item.id === payload.id ? this.users?.splice(index, 1) : null
-          );
-          this.users?.push(response.data.value);
-        }
-      } else {
-        this.users = null;
-      }
-    },
-    async updateUserPassword(payload: PasswordUpdate) {
-      const self = this;
-      const meFetch = useFetch<UserInfo>(`/api/v1/users/update-password/`, {
-        beforeFetch({ options, cancel }) {
-          const token = self.data.token;
-          if (!token) {
-            cancel();
-            return;
-          }
-          options.headers = {
-            Authorization: `Bearer ${token}`,
-          };
-
-          return { options };
-        },
-      });
-
-      const response = await meFetch.put(payload).json<UserInfo>();
-
-      if (!response.canAbort.value && response.statusCode.value === 200) {
-        return response.data.value;
-      } else {
-        this.users = null;
       }
     },
   },

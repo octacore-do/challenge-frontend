@@ -1,6 +1,6 @@
 <template>
-  <div class="flex">
-    <div class="flex mb-5">
+  <div class="grid justify-center">
+    <div class="flex mb-5 justify-center">
       <DrawerForm :title="''" v-model:show="showDrawerForm">
         <div class="mt-7 grid gap-4 mb-4 sm:grid-cols-2">
           <Select

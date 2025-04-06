@@ -151,7 +151,7 @@ async function onFormSubmit({ valid }) {
     });
 
     if (isSuccess.value) {
-      router.push("/");
+      router.push("/home");
     }
     loading.value = false;
   }
