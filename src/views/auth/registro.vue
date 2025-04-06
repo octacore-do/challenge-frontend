@@ -1,101 +1,105 @@
 <template>
   <div class="card">
-    <div class="innerCard">
+    <div class="w-full h-[90%]">
       <Toast />
-      <div class="btn" style="display: flex; justify-content: flex-start">
-        <Button
-          class="btn"
-          icon="pi pi-bookmark"
-          type="submit"
-          severity="secondary"
-          label="Login">
-        </Button>
+      <div class="w-15 h-10 flex start">
+        <Button type="submit" severity="info" label="Ir al login"> </Button>
       </div>
-      <div class="header">
-        <h3 class="">Registro de usuario</h3>
+      <div class="flex justify-center">
+        <img
+          src="https://static.thenounproject.com/png/6478-200.png"
+          alt=""
+          width="100px"
+          height="90px" />
       </div>
-      <Form
-        v-slot="$form"
-        :initialValues
-        :resolver
-        :validateOnValueUpdate="false"
-        :validateOnBlur="true"
-        @submit="onFormSubmit"
-        class="flex flex-col gap-8 w-full sm:w-56">
-        <div class="flex flex-col gap-2">
-          <IconField>
-            <InputIcon class="pi-minus-circle" />
-            <InputText
-              name="firstName"
-              type="text"
-              placeholder="First Name"
-              fluid
-              :formControl="{ validateOnValueUpdate: true }" />
-            <Message
-              v-if="$form.firstName?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.firstName.error.message }}</Message
-            >
-          </IconField>
-        </div>
-        <div class="input flex flex-col gap-2">
-          <IconField>
-            <InputIcon class="pi-minus-circle" />
-            <InputText
-              name="lastName"
-              type="text"
-              placeholder="Last Name"
-              fluid />
-            <Message
-              v-if="$form.lastName?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.lastName.error.message }}</Message
-            >
-          </IconField>
-        </div>
-        <div class="input flex flex-col gap-2">
-          <IconField>
-            <InputIcon class="pi pi-user" />
-            <InputText
-              name="username"
-              type="text"
-              placeholder="Username"
-              fluid />
-            <Message
-              v-if="$form.username?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.username.error.message }}
-            </Message>
-          </IconField>
-        </div>
-        <div class="input flex flex-col gap-2">
-          <IconField iconPosition="left">
-            <InputIcon class="pi pi-lock" />
-            <Password
-              name="password"
-              placeholder="Password"
-              :feedback="false"
-              toggleMask
-              fluid />
-            <Message
-              v-if="$form.password?.invalid"
-              severity="error"
-              size="small"
-              variant="simple"
-              >{{ $form.password.error.message }}
-            </Message>
-          </IconField>
-        </div>
-        <div class="btn">
-          <Button type="submit" severity="secondary" label="Submit" />
-        </div>
-      </Form>
+      <div class="flex justify-center mt-5">
+        <Form
+          v-slot="$form"
+          :initialValues
+          :resolver
+          :validateOnValueUpdate="false"
+          :validateOnBlur="true"
+          @submit="onFormSubmit"
+          class="flex flex-col gap-8 sm:w-80">
+          <div class="flex flex-col">
+            <IconField>
+              <InputIcon class="pi-minus-circle" />
+              <InputText
+                name="firstName"
+                type="text"
+                placeholder="First Name"
+                fluid
+                :formControl="{ validateOnValueUpdate: true }" />
+              <Message
+                v-if="$form.firstName?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.firstName.error.message }}</Message
+              >
+            </IconField>
+          </div>
+          <div class="input flex flex-col gap-2">
+            <IconField>
+              <InputIcon class="pi-minus-circle" />
+              <InputText
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
+                fluid />
+              <Message
+                v-if="$form.lastName?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.lastName.error.message }}</Message
+              >
+            </IconField>
+          </div>
+          <div class="input flex flex-col gap-2">
+            <IconField>
+              <InputIcon class="pi pi-user" />
+              <InputText
+                name="username"
+                type="text"
+                placeholder="Username"
+                fluid />
+              <Message
+                v-if="$form.username?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.username.error.message }}
+              </Message>
+            </IconField>
+          </div>
+          <div class="input flex flex-col gap-2">
+            <IconField iconPosition="left">
+              <InputIcon class="pi pi-lock" />
+              <Password
+                name="password"
+                placeholder="Password"
+                :feedback="false"
+                toggleMask
+                fluid />
+              <Message
+                v-if="$form.password?.invalid"
+                severity="error"
+                size="small"
+                variant="simple"
+                >{{ $form.password.error.message }}
+              </Message>
+            </IconField>
+          </div>
+          <div>
+            <Button
+              class="w-32"
+              type="submit"
+              severity="secondary"
+              label="Sign up" />
+          </div>
+        </Form>
+      </div>
     </div>
   </div>
 </template>
@@ -160,38 +164,15 @@ const onFormSubmit = ({ valid }) => {
 </script>
 
 <style>
-.header {
-  display: flex;
-  justify-content: center;
-}
-
 .card {
-  background: var(--card-bg);
+  background: rgb(255, 255, 255);
   border: var(--card-border);
   padding: 2rem;
   border-radius: 10px;
   margin-bottom: 1rem;
-
-  max-width: 80vh;
-  min-width: 90vh;
-
-  max-height: 60vh;
-  min-height: 50vh;
-
+  width: 90vh;
+  height: 60vh;
   display: flex;
-  align-items: center;
-}
-
-.innerCard {
-  width: 100%;
-  height: 90%;
-}
-
-.input {
-  margin-top: 1%;
-}
-
-.btn {
-  margin-top: 1%;
+  justify-content: center;
 }
 </style>

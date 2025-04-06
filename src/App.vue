@@ -5,7 +5,7 @@ import Dashboard from "./views/dashboard/jobScreen.vue";
 </script>
 
 <template>
-  <Dashboard />
+  <Registro />
 </template>
 
 <style scoped></style>

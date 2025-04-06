@@ -3,10 +3,12 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
-    "node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}",
-    "node_modules/flowbite/**/*.{js,jsx,ts,tsx}",
+    "node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}",
   ],
-  plugins: [require("flowbite/plugin")],
+  important: true,
+  corePlugins: {
+    preflight: false,
+  },
   darkMode: "class",
   safelist: [
     "w-64",

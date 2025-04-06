@@ -72,15 +72,7 @@
           <div
             class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
             <div class="mb-4">
-              <div class="relative mx-auto">
-                <img
-                  :src="
-                    'https://primefaces.org/cdn/primevue/images/product/' +
-                    slotProps.data.image
-                  "
-                  :alt="slotProps.data.name"
-                  class="w-full rounded" />
-              </div>
+              <div class="relative mx-auto"></div>
             </div>
             <div class="mb-4 font-medium">{{ slotProps.data.name }}</div>
             <div class="flex justify-between items-center">

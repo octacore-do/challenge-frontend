@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import "./index.css";
 import App from "./App.vue";
 import PrimeVue from "primevue/config";
+
 import ConfirmationService from "primevue/confirmationservice";
 import DialogService from "primevue/dialogservice";
 import ToastService from "primevue/toastservice";
@@ -21,6 +22,17 @@ app.use(PrimeVue, {
     },
   },
 });
+
+// app.use(PrimeVue, {
+//   unstyled: true,
+//   theme: {
+//     preset: Noir,
+//     options: {
+//       prefix: "p",
+//       darkModeSelector: "dark",
+//     },
+//   },
+// });
 
 app.use(AppState);
 app.use(ToastService);

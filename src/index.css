@@ -1,28 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+/* Your custom styles */
 
+body {
+  @apply m-0 h-screen w-full flex justify-center items-center;
+}
 
-  body {
-    margin: 0;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #app {
-    margin: 0;
-    padding: 1rem;
-    text-align: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-    min-height: 100%;
-    background-color: rgb(227, 235, 235);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-   
+#app {
+  @apply m-0 p-4 text-center overflow-x-hidden overflow-y-auto min-h-full min-w-[70%] bg-[#e3ebeb] flex justify-center items-center;
+}
