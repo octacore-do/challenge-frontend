@@ -104,8 +104,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { ref, reactive } from "vue";
 import {
   useToast,
   InputText,
@@ -118,18 +118,21 @@ import {
 } from "primevue";
 
 import { Form } from "@primevue/forms";
+import type { Username } from "../../store/types/store";
 
 const toast = useToast();
 
-const initialValues = ref({
+const formInitialState: Username = {
   username: "",
   firstName: "",
   lastName: "",
   password: "",
-});
+};
+
+let initialValues = reactive({ ...formInitialState });
 
 const resolver = ({ values }) => {
-  const errors = {};
+  const errors: any = {};
 
   if (!values.username) {
     errors.username = [{ message: "Username is required." }];

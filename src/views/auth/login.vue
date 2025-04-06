@@ -90,8 +90,11 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import { Form } from "@primevue/forms";
+import { useUserStore } from "../../store/modules/user";
 import {
   useToast,
   InputText,
@@ -102,51 +105,57 @@ import {
   IconField,
   InputIcon,
 } from "primevue";
+import type { Username } from "../../store/types/store";
 
-import { Form } from "@primevue/forms";
-
+const router = useRouter();
 const toast = useToast();
+const isSuccess = ref<Boolean | null>(null);
+const userStore = useUserStore();
 
-const initialValues = ref({
+const formInitialValues: Username = {
   username: "",
-  firstName: "",
-  lastName: "",
   password: "",
-});
+};
+
+const initialValues: Username = reactive({ ...formInitialValues });
+const loading = ref(false);
 
 const resolver = ({ values }) => {
-  const errors = {};
+  const errors: any = {};
 
   if (!values.username) {
     errors.username = [{ message: "Username is required." }];
   }
 
-  if (!values.firstName) {
-    errors.firstName = [{ message: "First name is required." }];
-  }
-
   if (!values.password) {
     errors.password = [{ message: "Password is required." }];
   }
-
-  if (!values.lastName) {
-    errors.lastName = [{ message: "Last name is required." }];
-  }
-
   return {
     errors,
   };
 };
 
-const onFormSubmit = ({ valid }) => {
+async function onFormSubmit({ valid }) {
+  loading.value = true;
+
   if (valid) {
     toast.add({
       severity: "success",
       summary: "Form is submitted.",
       life: 3000,
     });
+
+    isSuccess.value = await userStore.login({
+      password: initialValues.password,
+      username: initialValues.username,
+    });
+
+    if (isSuccess.value) {
+      router.push("/");
+    }
+    loading.value = false;
   }
-};
+}
 </script>
 
 <style>

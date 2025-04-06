@@ -4,11 +4,9 @@ import {
   createWebHistory,
   type RouteRecordRaw,
 } from "vue-router";
-import { useUserStore } from "~/store/modules/user";
-
+import { useUserStore } from "../store/modules/user";
 import routes from "./routes";
-import { UserTypeEnum } from "~/enums/userTypeEnum";
-import type { UserInfo } from "#/store";
+import type { UserInfo } from "../store/types/store";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -29,34 +27,7 @@ router.beforeEach(async (to, from) => {
 
   if (!user) await userStore.loadMe();
   if (!user || user === null) return "/login";
-
-  if (user.user_type === UserTypeEnum.NOTHING) {
-    userStore.logout();
-    return "/login";
-  }
-  if (user.user_type === UserTypeEnum.SUPER_ADMIN) return true;
-  if (
-    to.meta.allowed?.length === 0 ||
-    to.meta.allowed?.includes(user.user_type)
-  )
-    return true;
-
   return false;
-});
-
-router.afterEach(() => {
-  // HACK: Cerrar el modal tras navegar
-  let target = document.getElementById("drawer-navigation");
-  const hidden = target?.getAttribute("aria-hidden");
-  const model = target?.getAttribute("aria-modal");
-  if (hidden === null && model === "true") {
-    const btn = document.querySelector(
-      "[data-drawer-target='drawer-navigation']"
-    ) as HTMLButtonElement | null;
-    if (btn !== null) {
-      btn.click();
-    }
-  }
 });
 
 export function setupRouter(app: App<Element>) {

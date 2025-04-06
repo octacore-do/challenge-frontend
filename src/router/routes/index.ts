@@ -1,10 +1,7 @@
-import layout from "~/router/routes/layout";
-import ExternalLayout from "~/layouts/external/ExternalLayout.vue";
-import Login from "~/views/auth/login.vue";
+import Login from "../../views/auth/login.vue";
 
 const auth = {
   path: "/",
-  component: ExternalLayout,
   meta: {
     requiredAuth: false,
     allowed: [],
@@ -21,4 +18,4 @@ const auth = {
   ],
 };
 
-export default [auth, layout];
+export default [auth];
