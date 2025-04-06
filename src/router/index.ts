@@ -37,7 +37,7 @@ const routes: RouteRecordRaw[] = [
 ];
 
 export const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL), // Mejor manejo de base URL
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

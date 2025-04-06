@@ -20,3 +20,16 @@ export interface Username {
   lastName?: string;
   password: string;
 }
+
+export interface Jobs {
+  id?: number;
+  title: string;
+  salary: string;
+  expire_at: string;
+  description: string;
+  category_id?: string;
+  type_id?: string;
+  location_id?: string;
+  pipeline_id?: string;
+  company_id?: string;
+}

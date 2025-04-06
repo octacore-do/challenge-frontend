@@ -10,15 +10,12 @@
 
   <Drawer
     v-model:visible="isShow"
-    header="Digite debajo los detalles de la posicion:"
+    class="font-sans"
+    header="Detalles de la posicion:"
     position="left"
     style="height: auto">
-    <p>
-      {{ title }}
-    </p>
-    <div>
-      <slot />
-    </div>
+    {{ title }}
+    <slot />
   </Drawer>
 </template>
 

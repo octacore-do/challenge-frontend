@@ -2,57 +2,41 @@
   <div class="grid justify-center">
     <div class="flex mb-5 justify-center">
       <DrawerForm :title="''" v-model:show="showDrawerForm">
-        <div class="mt-7 grid gap-4 mb-4 sm:grid-cols-2">
+        <div class="mt-7 grid mb-4 sm:grid-cols-1">
           <Select
-            name="city.name"
-            class="DrawerInputs"
-            :options="industries"
+            name="description"
+            class="mb-3"
+            :options="description"
             optionLabel="name"
             placeholder="Seleccione un sector"
             fluid />
           <InputText
-            class="DrawerInputs"
-            placeholder="Nombre de la posicion"
             name="name"
+            class="mb-3"
+            placeholder="Nombre de la posicion"
             :model="v$.name"
             @change="handleInput" />
-
-          <Select
-            class="DrawerInputs"
-            name="city.name"
-            :options="disponibilidad"
-            optionLabel="name"
-            placeholder="Seleccione la disponibilidad"
-            fluid />
-          <Select
-            class="DrawerInputs"
-            name="city.name"
-            :options="modalidad"
-            optionLabel="name"
-            placeholder="Modalidad"
-            fluid />
           <InputText
-            class="DrawerInputs"
+            name="salario destinado"
+            class="mb-3"
             label="Codigo"
-            name="code"
             placeholder="Monto salarial destinado "
             :model="v$.code"
             @change="handleInput" />
-          <Select
-            class="DrawerInputs"
-            name="city.name"
-            :options="estatus"
-            optionLabel="name"
-            placeholder="Estatus"
-            fluid />
+          <DatePicker
+            v-model="value2"
+            placeholder="Expiracion de la vacante"
+            showIcon
+            iconDisplay="input" />
         </div>
-        <div
-          style="margin-top: 20%; display: flex; justify-content: space-around">
+        <div class="flex mt-10 justify-around">
           <Button
+            class="w-32"
             label="Guardar"
             @click="onToggleDrawerForm(true)"
             severity="info" />
           <Button
+            class="w-32"
             label="Cerrar"
             @click="onToggleDrawerForm()"
             severity="warn" />
@@ -60,31 +44,33 @@
         </div>
       </DrawerForm>
     </div>
-    <div class="card" style="margin-top: 5%">
+    <div class="mt-5">
       <Carousel
         :value="products"
-        :numVisible="3"
+        :numVisible="1"
         :numScroll="1"
         :responsiveOptions="responsiveOptions"
-        circular
         :autoplayInterval="1000">
         <template #item="slotProps">
-          <div
-            class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
-            <div class="mb-4">
-              <div class="relative mx-auto"></div>
-            </div>
-            <div class="mb-4 font-medium">{{ slotProps.data.name }}</div>
-            <div class="flex justify-between items-center">
-              <div class="mt-0 font-semibold text-xl">
-                ${{ slotProps.data.price }}
+          <Button severity="secondary" outlined>
+            <div
+              class="h-64 grid justify-center border border-surface-400 dark:border-surface-700 rounded m-2 p-4 bg-slate-100">
+              <div class="mt-4">
+                <div class="relative mx-auto"></div>
               </div>
-              <span>
-                <Button icon="pi pi-heart" severity="secondary" outlined />
-                <Button icon="pi pi-shopping-cart" class="ml-2" />
-              </span>
+              <div class="mb-2 font-medium">
+                {{ slotProps.data.title }}
+              </div>
+              <div class="mb-2 font-medium">
+                {{ slotProps.data.description }}
+              </div>
+              <div class="flex justify-center items-center">
+                <div class="mt-0 font-semibold text-xl">
+                  ${{ slotProps.data.salary }}
+                </div>
+              </div>
             </div>
-          </div>
+          </Button>
         </template>
       </Carousel>
     </div>
@@ -93,41 +79,25 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { Select, Button, InputText, Carousel } from "primevue";
+import { Select, Button, InputText, Carousel, DatePicker } from "primevue";
 import DrawerForm from "../../components/DrawerForm.vue";
-// import { RouterNames } from "../../enums";
-// import { router } from "../../router";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import type { Jobs } from "../../store/types/store";
+// import { RouterNames } from "../../enums";
+// import { router } from "../../router";
 
 const showDrawerForm = ref(false);
 
-const industries = ref([
+const description = ref([
   { name: "Ingenieria", code: "NY" },
   { name: "Salud", code: "RM" },
   { name: "Medicina", code: "IST" },
   { name: "Ciencias economicas", code: "PRS" },
-
   { name: "Comunicacion", code: "COM" },
   { name: "Juridico", code: "JUR" },
   { name: "Ventas", code: "VEN" },
   { name: "Enseñanza/Docencia", code: "TEA" },
-]);
-
-const disponibilidad = ref([
-  { name: "Inmediata", code: "IN" },
-  { name: "10 a 15 dias", code: "MASD" },
-]);
-
-const modalidad = ref([
-  { name: "Remota", code: "REM" },
-  { name: "Hibrida", code: "HIB" },
-  { name: "Presencial", code: "PRE" },
-]);
-
-const estatus = ref([
-  { name: "Activa", code: "ACT" },
-  { name: "Inactiva", code: "INAC" },
 ]);
 
 const formInitialState: any = {
@@ -135,6 +105,7 @@ const formInitialState: any = {
   code: "",
   id: 0,
 };
+
 const jobFormRules = {
   name: { required },
   code: { required },
@@ -155,41 +126,54 @@ const handleInput = (e: any) => {
 const products = ref([
   {
     id: "1000",
-    code: "f230fh0g3",
-    name: "Bamboo Watch",
-    description: "Product Description",
-    image: "bamboo-watch.jpg",
-    price: 65,
-    category: "Accessories",
-    quantity: 1,
-    inventoryStatus: "INSTOCK",
-    rating: 5,
+    title: "Bamboo Watch",
+    salary: 65,
+    expire_at: "f230fh0g3",
+    description:
+      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
   },
   {
-    id: "2000",
-    code: "nvklal433",
-    name: "Black Watch",
-    description: "Product Description",
-    image: "black-watch.jpg",
-    price: 65,
-    category: "Accessories",
-    quantity: 24,
-    inventoryStatus: "INSTOCK",
-    rating: 5,
+    id: "1000",
+    title: "Bamboo Watch",
+    salary: 65,
+    expire_at: "f230fh0g3",
+    description:
+      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
   },
   {
-    id: "3000",
-    code: "zz21cz3c1",
-    name: "Blue Band",
-    description: "Product Description",
-    image: "blue-band.jpg",
-    price: 65,
-    category: "Accessories",
-    quantity: 24,
-    inventoryStatus: "INSTOCK",
-    rating: 5,
+    id: "1000",
+    title: "Bamboo Watch",
+    salary: 65,
+    expire_at: "f230fh0g3",
+    description:
+      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
+  },
+  {
+    id: "1000",
+    title: "Bamboo Watch",
+    salary: 65,
+    expire_at: "f230fh0g3",
+    description:
+      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
   },
 ]);
+
+const onSubmit = async () => {
+  // const validated = await v$.value.$validate();
+  // if (!validated) return;
+  // if (jobForm.id === 0) await useStats.createKpiName(jobForm);
+  // else await useStats.updateKpiName(jobForm, Number(jobForm.id));
+  // router.push({ name: RouterNames.CORE_STATS });
+  // //refresh users list on app
+};
+
+const onToggleDrawerForm = async (saveuser?: boolean) => {
+  if (saveuser) await onSubmit();
+  jobForm.name = "";
+  jobForm.code = "";
+  jobForm.is_active = true;
+  showDrawerForm.value = !showDrawerForm.value;
+};
 
 const responsiveOptions = ref([
   {
@@ -213,23 +197,6 @@ const responsiveOptions = ref([
     numScroll: 1,
   },
 ]);
-
-const onSubmit = async () => {
-  // const validated = await v$.value.$validate();
-  // if (!validated) return;
-  // if (jobForm.id === 0) await useStats.createKpiName(jobForm);
-  // else await useStats.updateKpiName(jobForm, Number(jobForm.id));
-  // router.push({ name: RouterNames.CORE_STATS });
-  // //refresh users list on app
-};
-
-const onToggleDrawerForm = async (saveuser?: boolean) => {
-  if (saveuser) await onSubmit();
-  jobForm.name = "";
-  jobForm.code = "";
-  jobForm.is_active = true;
-  showDrawerForm.value = !showDrawerForm.value;
-};
 </script>
 
 <style>
@@ -240,9 +207,5 @@ const onToggleDrawerForm = async (saveuser?: boolean) => {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.DrawerInputs {
-  margin-bottom: 3%;
 }
 </style>
