@@ -1,4 +1,15 @@
+export interface EmailLoginResponse {
+  success: string;
+  message: string;
+}
+
+interface LoginData {
+  token: string;
+  name: string;
+}
+
 export interface AuthLoginResponse {
-  access_token: string;
-  token_type: string;
+  success: string;
+  data: LoginData;
+  message: string;
 }

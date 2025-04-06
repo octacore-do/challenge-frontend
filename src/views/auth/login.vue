@@ -115,12 +115,14 @@ const userStore = useUserStore();
 const formInitialValues: Username = {
   username: "",
   password: "",
+  email: "",
+  otp: "",
 };
 
 const initialValues: Username = reactive({ ...formInitialValues });
 const loading = ref(false);
 
-const resolver = ({ values }) => {
+const resolver = ({ values }: any) => {
   const errors: any = {};
 
   if (!values.username) {
@@ -135,23 +137,24 @@ const resolver = ({ values }) => {
   };
 };
 
-async function onFormSubmit({ valid }) {
+async function onFormSubmit({ valid }: any) {
   loading.value = true;
 
   if (valid) {
+    isSuccess.value = await userStore.getOTPByEmail(initialValues.email);
+
     toast.add({
-      severity: "success",
+      severity: isSuccess.value ? "success" : "error",
       summary: "Form is submitted.",
       life: 3000,
     });
 
-    isSuccess.value = await userStore.login({
-      password: initialValues.password,
-      username: initialValues.username,
-    });
-
     if (isSuccess.value) {
-      router.push("/home");
+      const tokenRequest = await userStore.getTokenByOTP(initialValues.otp);
+
+      if (isSuccess.value) {
+        router.push("/home");
+      }
     }
     loading.value = false;
   }

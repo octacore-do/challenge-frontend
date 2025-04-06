@@ -50,7 +50,7 @@
         :numVisible="1"
         :numScroll="1"
         :responsiveOptions="responsiveOptions"
-        :autoplayInterval="1000">
+        :autoplayInterval="1500">
         <template #item="slotProps">
           <Button severity="secondary" outlined>
             <div
@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { Select, Button, InputText, Carousel, DatePicker } from "primevue";
 import DrawerForm from "../../components/DrawerForm.vue";
 import { useVuelidate } from "@vuelidate/core";
@@ -174,6 +174,10 @@ const onToggleDrawerForm = async (saveuser?: boolean) => {
   jobForm.is_active = true;
   showDrawerForm.value = !showDrawerForm.value;
 };
+
+onMounted(() => {
+  // initFlowbite();
+});
 
 const responsiveOptions = ref([
   {
