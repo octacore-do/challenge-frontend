@@ -1,30 +1,55 @@
 <template>
   <div class="grid justify-center">
-    <div class="flex mb-5 justify-center">
+    <Dialog
+      v-model:visible="showCloseSessionDrawer"
+      modal
+      header="Cerrar sesion">
+      <span class="text-surface-500 dark:text-surface-400 block mb-8"
+        >Esta seguro de que desea cerrar sesion?</span
+      >
+      <div class="flex justify-center gap-2">
+        <Button
+          label="Si"
+          severity="danger"
+          @click="handleCloseSession"></Button>
+        <Button
+          label="No"
+          severity="secondary"
+          @click="showCloseSessionDrawer = !showCloseSessionDrawer"></Button>
+      </div>
+    </Dialog>
+    <div class="flex justify-center">
+      <div class="w-72 h-10">
+        <Button
+          icon="pi pi-user"
+          type="submit"
+          severity="secondary"
+          label="Cerrar sesion"
+          @click="showCloseSessionDrawer = !showCloseSessionDrawer" />
+      </div>
       <DrawerForm :title="''" v-model:show="showDrawerForm">
         <div class="mt-7 grid mb-4 sm:grid-cols-1">
           <Select
             name="description"
             class="mb-3"
             :options="description"
-            optionLabel="name"
             placeholder="Seleccione un sector"
+            optionLabel="name"
+            v-model="jobForm.description"
             fluid />
           <InputText
-            name="name"
+            name="title"
             class="mb-3"
             placeholder="Nombre de la posicion"
-            :model="v$.name"
+            :model="jobForm.title"
             @change="handleInput" />
           <InputText
             name="salario destinado"
             class="mb-3"
-            label="Codigo"
             placeholder="Monto salarial destinado "
-            :model="v$.code"
+            :model="jobForm.salary"
             @change="handleInput" />
           <DatePicker
-            v-model="value2"
             placeholder="Expiracion de la vacante"
             showIcon
             iconDisplay="input" />
@@ -46,18 +71,21 @@
     </div>
     <div class="mt-5">
       <Carousel
-        :value="products"
-        :numVisible="1"
+        :value="jobStore.jobs"
+        :numVisible="3"
         :numScroll="1"
         :autoplayInterval="2000">
         <template #item="slotProps">
-          <Button severity="secondary" outlined>
+          <Button
+            severity="secondary"
+            @click="onToggleDrawerForm(true, slotProps.data)"
+            outlined>
             <div
               class="h-64 grid justify-center border border-surface-400 dark:border-surface-700 rounded m-2 p-4 bg-slate-100">
               <div class="mt-4">
                 <div class="relative mx-auto"></div>
               </div>
-              <div class="mb-2 font-medium">
+              <div class="mb-2 text-lg text-slate-900 font-bold underline">
                 {{ slotProps.data.title }}
               </div>
               <div class="mb-2 font-medium">
@@ -65,7 +93,7 @@
               </div>
               <div class="flex justify-center items-center">
                 <div class="mt-0 font-semibold text-xl">
-                  ${{ slotProps.data.salary }}
+                  {{ formatCurrenct(slotProps.data.salary) }}
                 </div>
               </div>
             </div>
@@ -78,40 +106,55 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
-import { Select, Button, InputText, Carousel, DatePicker } from "primevue";
 import DrawerForm from "../../components/DrawerForm.vue";
-import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { useUserStore } from "../../store/modules/user";
+import { useJobStore } from "../../store/modules/jobs";
 import type { Job } from "../../store/types/store";
-// import { RouterNames } from "../../enums";
-// import { router } from "../../router";
+import { router } from "../../router";
+import {
+  Select,
+  Button,
+  InputText,
+  Carousel,
+  DatePicker,
+  Dialog,
+} from "primevue";
 
 const showDrawerForm = ref(false);
+const showCloseSessionDrawer = ref(false);
+const userStore = useUserStore();
+const jobStore = useJobStore();
 
-const description = ref([
-  { name: "Ingenieria", code: "NY" },
-  { name: "Salud", code: "RM" },
-  { name: "Medicina", code: "IST" },
-  { name: "Ciencias economicas", code: "PRS" },
-  { name: "Comunicacion", code: "COM" },
-  { name: "Juridico", code: "JUR" },
-  { name: "Ventas", code: "VEN" },
-  { name: "Enseñanza/Docencia", code: "TEA" },
+interface DescriptionItem {
+  name: string;
+}
+const description = ref<DescriptionItem[]>([
+  { name: "Ingenieria" },
+  { name: "Salud" },
+  { name: "Medicina" },
+  { name: "Ciencias economicas" },
+  { name: "Comunicacion" },
+  { name: "Juridico" },
+  { name: "Ventas" },
+  { name: "Enseñanza/Docencia" },
 ]);
 
-const formInitialState: any = {
-  name: "",
-  code: "",
+const formInitialState: Job = {
   id: 0,
+  title: "",
+  salary: "",
+  description: "",
+  expire_at: "",
 };
 
-const jobFormRules = {
-  name: { required },
-  code: { required },
-};
+let jobForm: Job = reactive({ ...formInitialState });
 
-let jobForm = reactive({ ...formInitialState });
-const v$ = useVuelidate(jobFormRules, jobForm);
+const formatCurrenct = (amount: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
+};
 
 const handleInput = (e: any) => {
   const fieldName = e.target.name;
@@ -122,69 +165,35 @@ const handleInput = (e: any) => {
   };
 };
 
-const products = ref([
-  {
-    id: "1000",
-    title: "Bamboo Watch",
-    salary: 65,
-    expire_at: "f230fh0g3",
-    description:
-      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
-  },
-  {
-    id: "1000",
-    title: "Bamboo Watch",
-    salary: 65,
-    expire_at: "f230fh0g3",
-    description:
-      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
-  },
-  {
-    id: "1000",
-    title: "Bamboo Watch",
-    salary: 65,
-    expire_at: "f230fh0g3",
-    description:
-      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
-  },
-  {
-    id: "1000",
-    title: "Bamboo Watch",
-    salary: 65,
-    expire_at: "f230fh0g3",
-    description:
-      "Aliquam aut iure sed nesciunt distinctio dolores. Est id et consequuntur voluptas est. Iste architecto aut doloribus quo sed provident rem.",
-  },
-]);
-
-const onSubmit = async () => {
-  // const validated = await v$.value.$validate();
-  // if (!validated) return;
-  // if (jobForm.id === 0) await useStats.createKpiName(jobForm);
-  // else await useStats.updateKpiName(jobForm, Number(jobForm.id));
-  // router.push({ name: RouterNames.CORE_STATS });
-  // //refresh users list on app
+const onSubmit = async (data?: Job) => {
+  const { name } = jobForm.description;
+  jobForm.description = name;
+  if (jobForm.id === 0) {
+    const { id, ...rest } = jobForm;
+    await jobStore.createJob(rest);
+  } else {
+    if (data && data.title != null) {
+      const { id, ...rest } = data;
+      await jobStore.updateJob(rest, Number(id));
+    }
+  }
 };
 
-const onToggleDrawerForm = async (saveuser?: boolean) => {
-  if (saveuser) await onSubmit();
-  jobForm.name = "";
-  jobForm.code = "";
-  jobForm.is_active = true;
+const onToggleDrawerForm = async (saveuser?: boolean, data?: Job) => {
+  if (saveuser) await onSubmit(data);
+  jobForm.title = "";
+  jobForm.salary = "";
+  jobForm.description = "";
+  jobForm.expire_at = null;
   showDrawerForm.value = !showDrawerForm.value;
 };
 
-// onMounted(() => {
-// });
-</script>
+const handleCloseSession = () => {
+  userStore.logout();
+  router.push("/login");
+};
 
-<style>
-.card {
-  height: 70%;
-  border-color: brown;
-  border-radius: 5%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
+onMounted(async () => {
+  await jobStore.fetchJobsData();
+});
+</script>

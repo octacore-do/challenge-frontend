@@ -3,7 +3,7 @@ import { computed, ref, onMounted } from "vue";
 import type { Job } from "../../store/types/store";
 import { useMyFetch } from "../../hooks/http";
 
-export const useStatsStore = defineStore("stats", () => {
+export const useJobStore = defineStore("job", () => {
   const jobs = ref<Job[] | null>(null);
 
   const jobsToSelect = computed((): Job[] => {
@@ -19,18 +19,22 @@ export const useStatsStore = defineStore("stats", () => {
   });
 
   const fetchJobsData = async () => {
-    const { statusCode, data } = await useMyFetch("").get().json<Job[]>();
+    const { statusCode, data } = await useMyFetch("/api/recruitment/jobs")
+      .get()
+      .json();
     if (statusCode.value === 200) {
-      jobs.value = data.value;
+      jobs.value = data.value.data;
     }
   };
 
   const createJob = async (payload: Job) => {
-    const { statusCode, data } = await useMyFetch("").post(payload).json<Job>();
-    if (statusCode.value === 200) {
-      jobs.value?.push(data.value!);
+    const { statusCode, data } = await useMyFetch("/api/recruitment/jobs")
+      .post(payload)
+      .json();
+    if (statusCode.value === 2001) {
+      jobs.value?.push(data.value.data);
+      return { data, statusCode };
     }
-    return { data, statusCode };
   };
 
   const updateJob = async (payload: Job, id: number) => {
@@ -53,5 +57,6 @@ export const useStatsStore = defineStore("stats", () => {
     updateJob,
     createJob,
     jobsToSelect,
+    jobs,
   };
 });

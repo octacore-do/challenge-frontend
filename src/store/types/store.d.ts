@@ -3,14 +3,9 @@ import { UserTypeEnum } from "~/enums/UserTypeEnum";
 export interface Job {
   id?: number;
   title: string;
-  salary: string;
-  expire_at: string;
-  description: string;
-  category_id?: string;
-  type_id?: string;
-  location_id?: string;
-  pipeline_id?: string;
-  company_id?: string;
+  salary?: string;
+  description?: string;
+  expire_at?: Date | string | null;
 }
 
 export interface Username {

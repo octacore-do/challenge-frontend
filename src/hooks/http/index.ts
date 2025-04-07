@@ -5,7 +5,7 @@ export const useMyFetch = createFetch({
   options: {
     beforeFetch({ options, cancel }) {
       const useUser = useUserStore();
-      const token = useUser.getToken;
+      const token = useUser.getToken();
       if (!token) {
         cancel();
         return;
