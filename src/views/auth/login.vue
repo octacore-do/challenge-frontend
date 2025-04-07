@@ -1,5 +1,28 @@
 <template>
   <div class="card">
+    <Dialog v-model:visible="showOTPDrawer" modal header="Mensaje de OTP">
+      <span class="text-surface-500 dark:text-surface-400 block mb-8"
+        >Por favor introducir el OTP enviado a us correo electronico</span
+      >
+      <div class="flex items-center gap-4 mb-4">
+        <InputText
+          id="username"
+          class="flex-auto"
+          autocomplete="off"
+          v-model="initialValues.otp" />
+        />
+      </div>
+      <div class="flex justify-center gap-2">
+        <Button
+          label="Cancel"
+          severity="danger"
+          @click="showOTPDrawer = !showOTPDrawer"></Button>
+        <Button
+          label="Enviar"
+          severity="success"
+          @click="handleOtpChange"></Button>
+      </div>
+    </Dialog>
     <div class="w-full h-[90%]">
       <Toast />
       <div class="w-12 h-10 flex start">
@@ -50,34 +73,16 @@
             <IconField>
               <InputIcon class="pi pi-user" />
               <InputText
-                name="username"
-                type="text"
-                placeholder="Username"
-                fluid />
+                name="email"
+                placeholder="Correo electronico"
+                fluid
+                v-model="initialValues.email" />
               <Message
-                v-if="$form.username?.invalid"
+                v-if="$form.email?.invalid"
                 severity="error"
                 size="small"
                 variant="simple"
-                >{{ $form.username.error.message }}
-              </Message>
-            </IconField>
-          </div>
-          <div class="input flex flex-col">
-            <IconField iconPosition="left">
-              <InputIcon class="pi pi-lock" />
-              <Password
-                name="password"
-                placeholder="Password"
-                :feedback="false"
-                toggleMask
-                fluid />
-              <Message
-                v-if="$form.password?.invalid"
-                severity="error"
-                size="small"
-                variant="simple"
-                >{{ $form.password.error.message }}
+                >{{ $form.email.error.message }}
               </Message>
             </IconField>
           </div>
@@ -101,9 +106,9 @@ import {
   Message,
   Toast,
   Button,
-  Password,
   IconField,
   InputIcon,
+  Dialog,
 } from "primevue";
 import type { Username } from "../../store/types/store";
 
@@ -112,8 +117,9 @@ const toast = useToast();
 const isSuccess = ref<Boolean | null>(null);
 const userStore = useUserStore();
 
+const showOTPDrawer = ref(false);
+
 const formInitialValues: Username = {
-  username: "",
   password: "",
   email: "",
   otp: "",
@@ -125,13 +131,9 @@ const loading = ref(false);
 const resolver = ({ values }: any) => {
   const errors: any = {};
 
-  if (!values.username) {
-    errors.username = [{ message: "Username is required." }];
-  }
+  if (!values.email)
+    errors.email = [{ message: "El correo electronico es requerido." }];
 
-  if (!values.password) {
-    errors.password = [{ message: "Password is required." }];
-  }
   return {
     errors,
   };
@@ -139,26 +141,37 @@ const resolver = ({ values }: any) => {
 
 async function onFormSubmit({ valid }: any) {
   loading.value = true;
-
   if (valid) {
     isSuccess.value = await userStore.getOTPByEmail(initialValues.email);
 
     toast.add({
       severity: isSuccess.value ? "success" : "error",
-      summary: "Form is submitted.",
+      summary: isSuccess.value
+        ? "Se envio el OTP a su correo"
+        : "Hubo un error inesperado!",
       life: 3000,
     });
 
     if (isSuccess.value) {
-      const tokenRequest = await userStore.getTokenByOTP(initialValues.otp);
-
-      if (isSuccess.value) {
-        router.push("/home");
-      }
+      // abrir drawer
+      showOTPDrawer.value = true;
     }
     loading.value = false;
   }
 }
+
+const handleOtpChange = async () => {
+  if (initialValues.otp != null) {
+    showOTPDrawer.value = false;
+    const { email, otp } = initialValues;
+    const tokenResponseSuccess = await userStore.getTokenByOTP({
+      email,
+      otp,
+    });
+
+    if (tokenResponseSuccess) router.push("/home");
+  }
+};
 </script>
 
 <style>

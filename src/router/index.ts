@@ -45,7 +45,7 @@ export const router = createRouter({
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
-  const isAuthenticated = userStore.getToken;
+  const isAuthenticated = userStore.getToken();
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return { name: "Login" };

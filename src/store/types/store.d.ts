@@ -13,13 +13,6 @@ export interface Job {
   company_id?: string;
 }
 
-export interface UserState {
-  id?: number;
-  email: string | null;
-  password: string | null;
-  token: string | null;
-}
-
 export interface Username {
   id?: number;
   username?: string;

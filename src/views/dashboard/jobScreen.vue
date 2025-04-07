@@ -49,8 +49,7 @@
         :value="products"
         :numVisible="1"
         :numScroll="1"
-        :responsiveOptions="responsiveOptions"
-        :autoplayInterval="1500">
+        :autoplayInterval="2000">
         <template #item="slotProps">
           <Button severity="secondary" outlined>
             <div
@@ -83,7 +82,7 @@ import { Select, Button, InputText, Carousel, DatePicker } from "primevue";
 import DrawerForm from "../../components/DrawerForm.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import type { Jobs } from "../../store/types/store";
+import type { Job } from "../../store/types/store";
 // import { RouterNames } from "../../enums";
 // import { router } from "../../router";
 
@@ -175,39 +174,15 @@ const onToggleDrawerForm = async (saveuser?: boolean) => {
   showDrawerForm.value = !showDrawerForm.value;
 };
 
-onMounted(() => {
-  // initFlowbite();
-});
-
-const responsiveOptions = ref([
-  {
-    breakpoint: "1400px",
-    numVisible: 2,
-    numScroll: 1,
-  },
-  {
-    breakpoint: "1199px",
-    numVisible: 3,
-    numScroll: 1,
-  },
-  {
-    breakpoint: "767px",
-    numVisible: 2,
-    numScroll: 1,
-  },
-  {
-    breakpoint: "575px",
-    numVisible: 1,
-    numScroll: 1,
-  },
-]);
+// onMounted(() => {
+// });
 </script>
 
 <style>
 .card {
   height: 70%;
-  border: 2;
-  border-radius: 2%;
+  border-color: brown;
+  border-radius: 5%;
   display: flex;
   justify-content: center;
   align-items: center;

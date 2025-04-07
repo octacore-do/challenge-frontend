@@ -9,7 +9,7 @@ interface LoginData {
 }
 
 export interface AuthLoginResponse {
-  success: string;
+  success: boolean;
   data: LoginData;
   message: string;
 }

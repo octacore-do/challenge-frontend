@@ -9,6 +9,12 @@ import "primeicons/primeicons.css";
 import { setupStore } from "../src/store/index.ts";
 import { router, setupRouter } from "../src/router/index.ts";
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => registration.unregister());
+  });
+}
+
 const app = createApp(App);
 
 app.use(PrimeVue, {
