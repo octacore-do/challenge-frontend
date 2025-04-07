@@ -1,0 +1,36 @@
+<template>
+  <div class="flex gap justify-center">
+    <Button
+      icon="pi pi-spin pi-cog"
+      iconPos="right"
+      raised
+      @click="onToggle"
+      label="Ingresar nueva posicion" />
+  </div>
+
+  <Drawer
+    v-model:visible="isShow"
+    class="font-sans"
+    header="Detalles de la posicion:"
+    position="left"
+    style="height: auto">
+    {{ title }}
+    <slot />
+  </Drawer>
+</template>
+
+<script setup lang="ts">
+import { useVModel } from "@vueuse/core";
+import { Button, Drawer } from "primevue";
+
+const props = defineProps<{
+  title: string;
+  show: boolean;
+}>();
+
+const isShow = useVModel(props, "show");
+
+const onToggle = () => (isShow.value = !isShow.value);
+</script>
+
+<style scoped></style>
